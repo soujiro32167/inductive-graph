@@ -1,0 +1,25 @@
+branches:
+  only:
+    - master
+
+jdk: openjdk11
+language: scala
+
+scala:
+  - 2.13.0
+
+# Cleanup the cached directories to avoid unnecessary cache updates
+before_cache:
+  - rm -fv $HOME/.ivy2/.sbt.ivy.lock
+  - find $HOME/.ivy2/cache -name "ivydata-*.properties" -print -delete
+  - find $HOME/.sbt        -name "*.lock"               -print -delete
+
+# These directories are cached to a cloud storage provider "close" to the infrastructure the builds run on.
+cache:
+  directories:
+    - $HOME/.ivy2/cache
+    - $HOME/.sbt
+
+script:
+  - sbt ++$TRAVIS_SCALA_VERSION coverage test coverageReport
+  - bash <(curl -s https://codecov.io/bash)
