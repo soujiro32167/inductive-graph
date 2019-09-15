@@ -1,0 +1,6 @@
+# JVM
+
+target/
+
+# IJ
+.idea/
